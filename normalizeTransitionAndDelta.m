@@ -11,9 +11,25 @@ function [ TransitionNorm, DeltaNorm ] = normalizeTransitionAndDelta( Transition
 % normalize across rows
 TransitionNorm = Transition./repmat(sum(Transition,2),[1 size(Transition,2)]);
 TransitionNorm(isnan(TransitionNorm))=0;
+sumOfTranNorm = sum(TransitionNorm,2);
+for a=1:1:length(sumOfTranNorm)
+    if(sumOfTranNorm(a) == 0)
+        TransitionNorm(a,:) = 1/length(sumOfTranNorm);
+    end
+end
 
 % normalize across 3rd dimension
-DeltaNorm = Delta./repmat(sum(Delta,2),[1 size(Delta,2) 1]);
-DeltaNorm(isnan(DeltaNorm))=0;
+DeltaNorm = zeros(size(Delta));
+for a=1:1:size(Delta,1)
+    for b=1:1:size(Delta,2)
+        x = sum(Delta(a,b,1:size(Delta,3)));
+        if x~=0
+            for c=1:1:size(Delta,3)
+                DeltaNorm(a,b,c) = Delta(a,b,c)/x;
+            end
+        else
+            DeltaNorm(a,b,1:size(Delta,3)) = 1/size(Delta,3);
+        end
+    end
 end
 
