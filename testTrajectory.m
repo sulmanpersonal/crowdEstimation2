@@ -24,7 +24,7 @@ index = find(IDx == idNumber);
 % search for the zones for the particular id given as input
 zoneId = Zones(index);
 % get the zone changing points and their time stamps for the change
-[changeZoneId, indexChangeZone] = unique(zoneId,'stable')
+[changeZoneId, indexChangeZone] = unique(zoneId,'stable');
 % remove out of zones elements in the trajectory
 indexChangeZone(changeZoneId==0) = [];
 changeZoneId(changeZoneId==0) = [];
@@ -54,5 +54,5 @@ for a=2:1:length(changeZoneId)
      GammaP(a,1) = TRANSITION_P_NORM(changeZoneId(a-1,1),changeZoneId(a,1)) * DELTAT_P_NORM(changeZoneId(a-1,1),changeZoneId(a,1),quantizedTime(a-1,1)) * GammaP(a-1,1);
 end
 % %logAnsGamma% = calculate the log difference of GammaP and GammaN
-logAnsGamma = log(GammaP./GammaN);
+logAnsGamma = GammaP./(GammaN+GammaP);
 end
